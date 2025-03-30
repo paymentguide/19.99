@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biology Quiz</title>
+    <title>Engineering Quiz</title>
     <style>
         :root {
-            --leaf-green: #4CAF50;
-            --dark-green: #2E7D32;
-            --light-green: #A5D6A7;
-            --bright-green: #00FF00;
-            --wood-brown: #795548;
-            --water-blue: #2196F3;
-            --cell-pink: #E91E63;
+            --steel-blue: #4682B4;
+            --dark-blue: #1A3C5A;
+            --light-blue: #ADD8E6;
+            --bright-blue: #00BFFF;
+            --metal-gray: #808080;
+            --blueprint-blue: #0D47A1;
+            --circuit-green: #4CAF50;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #F1F8E9;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234CAF50' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-color: #E3F2FD;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234682B4' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
             margin: 0;
             padding: 0;
             display: flex;
@@ -30,20 +30,20 @@
         .quiz-container {
             background-color: white;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 100, 0, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 100, 0.2);
             width: 80%;
             max-width: 700px;
             overflow: hidden;
-            border: 8px solid var(--dark-green);
+            border: 8px solid var(--dark-blue);
             position: relative;
         }
         
         .quiz-header {
-            background-color: var(--leaf-green);
+            background-color: var(--steel-blue);
             color: white;
             padding: 20px;
             text-align: center;
-            border-bottom: 5px solid var(--dark-green);
+            border-bottom: 5px solid var(--dark-blue);
             position: relative;
         }
         
@@ -52,7 +52,7 @@
             position: absolute;
             width: 40px;
             height: 70px;
-            background-color: var(--leaf-green);
+            background-color: var(--steel-blue);
             border-radius: 50%;
             top: -30px;
         }
@@ -77,18 +77,18 @@
         
         .timer-container {
             margin: 15px 30px;
-            background-color: #E8F5E9;
+            background-color: #EEF5F9;
             border-radius: 10px;
             height: 20px;
             overflow: hidden;
-            border: 2px solid var(--dark-green);
+            border: 2px solid var(--dark-blue);
             position: relative;
         }
         
         .timer-bar {
             height: 100%;
             width: 100%;
-            background-color: var(--leaf-green);
+            background-color: var(--steel-blue);
             transition: width 0.1s linear;
         }
         
@@ -97,7 +97,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: var(--dark-green);
+            color: var(--dark-blue);
             font-weight: bold;
             z-index: 1;
         }
@@ -113,8 +113,8 @@
             font-size: 1.2em;
             font-weight: 600;
             margin-bottom: 20px;
-            color: var(--dark-green);
-            border-left: 5px solid var(--leaf-green);
+            color: var(--dark-blue);
+            border-left: 5px solid var(--steel-blue);
             padding-left: 15px;
         }
         
@@ -126,21 +126,21 @@
         
         .option {
             padding: 15px;
-            background-color: #F1F8E9;
-            border: 2px solid var(--light-green);
+            background-color: #E3F2FD;
+            border: 2px solid var(--light-blue);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s;
         }
         
         .option:hover {
-            background-color: var(--light-green);
+            background-color: var(--light-blue);
             transform: translateX(5px);
         }
         
         .correct {
-            background-color: var(--bright-green);
-            border-color: var(--dark-green);
+            background-color: var(--bright-blue);
+            border-color: var(--dark-blue);
             color: black;
             font-weight: bold;
         }
@@ -161,7 +161,7 @@
         }
         
         .progress-dot.active {
-            background-color: var(--leaf-green);
+            background-color: var(--steel-blue);
             transform: scale(1.3);
         }
         
@@ -173,19 +173,19 @@
         
         .results-header {
             font-size: 2em;
-            color: var(--dark-green);
+            color: var(--dark-blue);
             margin-bottom: 20px;
         }
         
         .score {
             font-size: 4em;
-            color: var(--leaf-green);
+            color: var(--steel-blue);
             font-weight: bold;
             margin: 20px 0;
         }
         
         .restart-btn {
-            background-color: var(--leaf-green);
+            background-color: var(--steel-blue);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -197,11 +197,11 @@
         }
         
         .restart-btn:hover {
-            background-color: var(--dark-green);
+            background-color: var(--dark-blue);
             transform: translateY(-3px);
         }
         
-        /* Plant decorations */
+        /* Engineering decorations */
         .plant-decoration {
             position: absolute;
             z-index: -1;
@@ -219,24 +219,24 @@
             transform: rotate(15deg) scaleX(-1);
         }
         
-        .leaf {
-            width: 100px;
-            height: 50px;
-            background-color: var(--leaf-green);
-            border-radius: 50% 50% 0 50%;
+        .gear {
+            width: 80px;
+            height: 80px;
+            background-color: var(--metal-gray);
+            border-radius: 50%;
             position: relative;
             opacity: 0.8;
         }
         
-        .leaf::before {
+        .gear::before {
             content: "";
             position: absolute;
-            width: 70%;
-            height: 70%;
-            background-color: var(--light-green);
-            border-radius: 50% 50% 0 50%;
-            top: 15%;
-            left: 15%;
+            width: 40%;
+            height: 40%;
+            background-color: white;
+            border-radius: 50%;
+            top: 30%;
+            left: 30%;
         }
         
         .timer-paused {
@@ -311,13 +311,13 @@
         .character-body {
             width: 60px;
             height: 60px;
-            background-color: var(--leaf-green);
+            background-color: var(--steel-blue);
             border-radius: 50%;
             position: absolute;
             bottom: 0;
             left: 10px;
             overflow: hidden;
-            border: 3px solid var(--dark-green);
+            border: 3px solid var(--dark-blue);
         }
         
         .character-face {
@@ -464,7 +464,7 @@
 <body>
     <div class="quiz-container">
         <div class="quiz-header">
-            <h1>Biology Quiz</h1>
+            <h1>Engineering Quiz</h1>
             
             <!-- Animated Character -->
             <div class="animated-character">
@@ -506,10 +506,10 @@
         </div>
         
         <div class="plant-decoration plant-left">
-            <div class="leaf"></div>
+            <div class="gear"></div>
         </div>
         <div class="plant-decoration plant-right">
-            <div class="leaf"></div>
+            <div class="gear"></div>
         </div>
     </div>
 
@@ -517,54 +517,53 @@
         // Quiz questions
         const questions = [
             {
-                question: "Which organelle is known as the 'powerhouse of the cell'?",
-                options: ["Nucleus", "Mitochondria", "Golgi apparatus", "Endoplasmic reticulum"],
+                question: "Which component is known as the 'brain' of a computer?",
+                options: ["Hard Drive", "CPU", "RAM", "Graphics Card"],
                 correctAnswer: 1
             },
             {
-                question: "The process by which plants make their own food is called:",
-                options: ["Respiration", "Photosynthesis", "Transpiration", "Digestion"],
+                question: "The process of converting a design into a physical product is called:",
+                options: ["Ideation", "Manufacturing", "Prototyping", "Simulation"],
                 correctAnswer: 1
             },
             {
-                question: "DNA stands for:",
-                options: ["Deoxyribose Nucleic Acid", "Deoxyribonucleic Acid", "Diribonucleic Acid", "Deoxyribosenucleotide Acid"],
+                question: "CAD stands for:",
+                options: ["Computer Artistic Design", "Computer-Aided Design", "Computer Algorithm Development", "Computerized Analytic Drawing"],
                 correctAnswer: 1
             },
             {
-                question: "Which of the following is NOT a type of blood cell?",
-                options: ["Erythrocytes", "Lymphocytes", "Platelets", "Nephrons"],
+                question: "Which of the following is NOT a type of engineering discipline?",
+                options: ["Civil", "Mechanical", "Chemical", "Botanical"],
                 correctAnswer: 3
             },
             {
-                question: "The basic unit of structure and function in living organisms is:",
-                options: ["Atom", "Cell", "Tissue", "Organ"],
+                question: "The basic unit of electric current is:",
+                options: ["Volt", "Ampere", "Ohm", "Watt"],
                 correctAnswer: 1
             },
             {
-                question: "What is the primary pigment responsible for photosynthesis?",
-                options: ["Chlorophyll", "Melanin", "Carotene", "Hemoglobin"],
+                question: "What material is most commonly used in 3D printing?",
+                options: ["PLA", "Steel", "Glass", "Concrete"],
                 correctAnswer: 0
             },
             {
-                // INTENTIONALLY WRONG QUESTION (Liver is correct, not kidneys)
-                question: "Which organ is primarily responsible for detoxification in the human body?",
-                options: ["Liver", "Kidneys", "Lungs", "Spleen"],
-                correctAnswer: 1  // This should be 0 (Liver) if correct
+                question: "Which component is primarily responsible for power conditioning in electronic devices?",
+                options: ["Capacitor", "Resistor", "Transistor", "Diode"],
+                correctAnswer: 0
             },
             {
-                question: "The study of heredity and gene variation is called:",
-                options: ["Cytology", "Genetics", "Ecology", "Physiology"],
+                question: "The study of forces and motion is called:",
+                options: ["Thermodynamics", "Mechanics", "Fluid Dynamics", "Electromagnetics"],
                 correctAnswer: 1
             },
             {
-                question: "Which of the following is an example of a decomposer?",
-                options: ["Mushroom", "Grass", "Eagle", "Shark"],
+                question: "Which of the following is an example of a renewable energy source?",
+                options: ["Solar", "Coal", "Natural Gas", "Petroleum"],
                 correctAnswer: 0
             },
             {
-                question: "The pH of human blood normally ranges between:",
-                options: ["5.5 - 6.5", "6.5 - 7.0", "7.35 - 7.45", "8.0 - 8.5"],
+                question: "The strength-to-weight ratio of structural materials is most important in which engineering field?",
+                options: ["Software Engineering", "Chemical Engineering", "Aerospace Engineering", "Petroleum Engineering"],
                 correctAnswer: 2
             }
         ];
