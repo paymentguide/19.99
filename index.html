@@ -201,23 +201,6 @@
             transform: translateY(-3px);
         }
         
-        .control-btn {
-            background-color: var(--leaf-green);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            font-size: 0.9em;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            margin-top: 10px;
-        }
-        
-        .control-btn:hover {
-            background-color: var(--dark-green);
-        }
-        
         /* Plant decorations */
         .plant-decoration {
             position: absolute;
@@ -309,12 +292,129 @@
             }
         }
         
-        /* Sound controls */
-        .sound-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            padding: 10px;
+        /* Animated Character */
+        .animated-character {
+            position: absolute;
+            right: 10px;
+            top: 20px;
+            width: 80px;
+            height: 80px;
+            z-index: 10;
+        }
+        
+        .character-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .character-body {
+            width: 60px;
+            height: 60px;
+            background-color: var(--leaf-green);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            overflow: hidden;
+            border: 3px solid var(--dark-green);
+        }
+        
+        .character-face {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .character-eye {
+            position: absolute;
+            width: 10px;
+            height: 15px;
+            background-color: white;
+            border-radius: 50%;
+            top: 20px;
+        }
+        
+        .character-eye-left {
+            left: 15px;
+        }
+        
+        .character-eye-right {
+            right: 15px;
+        }
+        
+        .character-pupil {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: black;
+            border-radius: 50%;
+            top: 5px;
+            left: 2.5px;
+        }
+        
+        .character-mouth {
+            position: absolute;
+            width: 24px;
+            height: 12px;
+            border-radius: 0 0 12px 12px;
+            background-color: white;
+            bottom: 15px;
+            left: 18px;
+            overflow: hidden;
+        }
+        
+        .character-mouth-inner {
+            width: 100%;
+            height: 5px;
+            background-color: #FF5252;
+            position: absolute;
+            bottom: 0;
+        }
+        
+        /* Character animations */
+        .character-speaking {
+            animation: speaking 0.5s infinite alternate;
+        }
+        
+        @keyframes speaking {
+            0% {
+                height: 12px;
+                border-radius: 0 0 12px 12px;
+            }
+            100% {
+                height: 8px;
+                border-radius: 0 0 8px 8px;
+            }
+        }
+        
+        .character-blink {
+            animation: blink 3s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 96%, 100% {
+                transform: scaleY(1);
+            }
+            98% {
+                transform: scaleY(0.1);
+            }
+        }
+        
+        .character-thinking {
+            animation: thinking 2s infinite;
+        }
+        
+        @keyframes thinking {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(5deg);
+            }
+            75% {
+                transform: rotate(-5deg);
+            }
         }
         
         @media (max-width: 700px) {
@@ -325,6 +425,39 @@
             .plant-decoration {
                 display: none;
             }
+            
+            .animated-character {
+                width: 60px;
+                height: 60px;
+                right: 5px;
+                top: 15px;
+            }
+            
+            .character-body {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .character-eye {
+                width: 8px;
+                height: 12px;
+                top: 15px;
+            }
+            
+            .character-eye-left {
+                left: 12px;
+            }
+            
+            .character-eye-right {
+                right: 12px;
+            }
+            
+            .character-mouth {
+                width: 18px;
+                height: 9px;
+                bottom: 12px;
+                left: 14px;
+            }
         }
     </style>
 </head>
@@ -332,11 +465,25 @@
     <div class="quiz-container">
         <div class="quiz-header">
             <h1>Biology Quiz</h1>
-        </div>
-        
-        <div class="sound-controls">
-            <button id="toggle-voice" class="control-btn">Mute Voice</button>
-            <button id="toggle-sound" class="control-btn">Mute Sound Effects</button>
+            
+            <!-- Animated Character -->
+            <div class="animated-character">
+                <div class="character-container">
+                    <div class="character-body">
+                        <div class="character-face">
+                            <div class="character-eye character-eye-left character-blink">
+                                <div class="character-pupil"></div>
+                            </div>
+                            <div class="character-eye character-eye-right character-blink">
+                                <div class="character-pupil"></div>
+                            </div>
+                            <div class="character-mouth">
+                                <div class="character-mouth-inner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="timer-container">
@@ -432,6 +579,9 @@
         let voiceEnabled = true;
         let soundEffectsEnabled = true;
         let currentUtterance = null;
+        let tickSound = null;
+        let dingSound = null;
+        let tickInterval = null;
         
         // DOM elements
         const questionText = document.getElementById('question-text');
@@ -443,13 +593,13 @@
         const finalScore = document.getElementById('final-score');
         const restartBtn = document.getElementById('restart-btn');
         const questionContainer = document.getElementById('question-container');
-        const toggleVoiceBtn = document.getElementById('toggle-voice');
-        const toggleSoundBtn = document.getElementById('toggle-sound');
+        const characterMouth = document.querySelector('.character-mouth');
+        const characterBody = document.querySelector('.character-body');
         
         // Check if speech synthesis is supported
         const speechSynthesisSupported = 'speechSynthesis' in window;
         
-        // Create audio context and swoosh sound
+        // Create audio context and sounds
         let audioContext;
         let swooshBuffer;
         
@@ -461,6 +611,12 @@
                 
                 // Create a buffer for the swoosh sound (white noise with filter sweep)
                 createSwooshSound();
+                
+                // Create tick sound
+                createTickSound();
+                
+                // Create ding sound
+                createDingSound();
             } catch(e) {
                 console.warn('Web Audio API is not supported in this browser');
                 soundEffectsEnabled = false;
@@ -489,6 +645,42 @@
             }
         }
         
+        // Create tick sound
+        function createTickSound() {
+            const duration = 0.05;
+            const sampleRate = audioContext.sampleRate;
+            const bufferSize = duration * sampleRate;
+            tickSound = audioContext.createBuffer(1, bufferSize, sampleRate);
+            
+            const data = tickSound.getChannelData(0);
+            
+            // Create a tick sound using a quick sine wave
+            for (let i = 0; i < bufferSize; i++) {
+                const t = i / sampleRate;
+                // Using a sine wave with exponential decay
+                data[i] = Math.sin(2 * Math.PI * 800 * t) * Math.exp(-15 * t);
+            }
+        }
+        
+        // Create ding sound
+        function createDingSound() {
+            const duration = 0.3;
+            const sampleRate = audioContext.sampleRate;
+            const bufferSize = duration * sampleRate;
+            dingSound = audioContext.createBuffer(1, bufferSize, sampleRate);
+            
+            const data = dingSound.getChannelData(0);
+            
+            // Create a ding sound (like a bell)
+            for (let i = 0; i < bufferSize; i++) {
+                const t = i / sampleRate;
+                // Using a combination of sine waves with different frequencies
+                data[i] = 0.5 * Math.sin(2 * Math.PI * 880 * t) * Math.exp(-5 * t) + 
+                          0.3 * Math.sin(2 * Math.PI * 1760 * t) * Math.exp(-7 * t) +
+                          0.2 * Math.sin(2 * Math.PI * 2640 * t) * Math.exp(-9 * t);
+            }
+        }
+        
         // Play swoosh sound
         function playSwooshSound() {
             if (!soundEffectsEnabled || !audioContext || !swooshBuffer) return;
@@ -512,21 +704,74 @@
             source.start();
         }
         
-        // Toggle voice narration
-        function toggleVoice() {
-            voiceEnabled = !voiceEnabled;
-            toggleVoiceBtn.textContent = voiceEnabled ? 'Mute Voice' : 'Enable Voice';
+        // Play tick sound
+        function playTickSound() {
+            if (!soundEffectsEnabled || !audioContext || !tickSound) return;
             
-            // Stop current speech if it's playing
-            if (!voiceEnabled && currentUtterance) {
-                window.speechSynthesis.cancel();
+            const source = audioContext.createBufferSource();
+            source.buffer = tickSound;
+            source.connect(audioContext.destination);
+            source.start();
+        }
+        
+        // Play ding sound
+        function playDingSound() {
+            if (!soundEffectsEnabled || !audioContext || !dingSound) return;
+            
+            const source = audioContext.createBufferSource();
+            source.buffer = dingSound;
+            
+            // Add a gain node to control volume
+            const gainNode = audioContext.createGain();
+            gainNode.gain.value = 0.7; // Adjust volume
+            
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            source.start();
+        }
+        
+        // Start tick sound interval
+        function startTickSounds() {
+            if (tickInterval) clearInterval(tickInterval);
+            
+            // Play tick sound every second during countdown
+            tickInterval = setInterval(() => {
+                if (!isPaused && !isTransitioning) {
+                    playTickSound();
+                }
+            }, 1000);
+        }
+        
+        // Stop tick sound interval
+        function stopTickSounds() {
+            if (tickInterval) {
+                clearInterval(tickInterval);
+                tickInterval = null;
             }
         }
         
-        // Toggle sound effects
-        function toggleSoundEffects() {
-            soundEffectsEnabled = !soundEffectsEnabled;
-            toggleSoundBtn.textContent = soundEffectsEnabled ? 'Mute Sound Effects' : 'Enable Sound Effects';
+        // Animate character
+        function animateCharacter(state) {
+            const eyes = document.querySelectorAll('.character-eye');
+            
+            // Reset all animations
+            characterMouth.classList.remove('character-speaking');
+            characterBody.classList.remove('character-thinking');
+            
+            switch(state) {
+                case 'speaking':
+                    characterMouth.classList.add('character-speaking');
+                    break;
+                case 'thinking':
+                    characterBody.classList.add('character-thinking');
+                    break;
+                case 'idle':
+                    // Just blink (already set up in CSS)
+                    break;
+                case 'correct':
+                    // Happy animation could be added here
+                    break;
+            }
         }
         
         // Speak text using speech synthesis
@@ -535,6 +780,9 @@
             
             // Cancel any ongoing speech
             window.speechSynthesis.cancel();
+            
+            // Animate character to speaking mode
+            animateCharacter('speaking');
             
             // Create new utterance
             const utterance = new SpeechSynthesisUtterance(text);
@@ -585,9 +833,10 @@
             // Speak
             window.speechSynthesis.speak(utterance);
             
-            // Remove reference when done
+            // Remove reference when done and stop animation
             utterance.onend = function() {
                 currentUtterance = null;
+                animateCharacter('idle');
             };
         }
         
@@ -606,237 +855,289 @@
                 progressIndicator.appendChild(dot);
             }
             
+            // Set character to idle state
+            animateCharacter('idle');
+            
             // Load first question with fade-in animation
             questionContainer.classList.add('fade-in');
             loadQuestion();
         }
         
         // Calculate reading time based on question length
-        function calculateReadingTime(question) {
-            const words = question.split(' ').length;
-            // Estimate 250 words per minute reading speed - minimum 3 seconds to allow for speech
-            return Math.max(Math.ceil(words / 250 * 60), 3);
+function calculateReadingTime(question) {
+    const words = question.split(' ').length;
+    // Estimate 250 words per minute reading speed
+    return Math.max(5, Math.ceil((words / 250) * 60));
+}
+
+// Load a question
+function loadQuestion() {
+    if (currentQuestion >= questions.length) {
+        showResults();
+        return;
+    }
+    
+    // Get the current question
+    const question = questions[currentQuestion];
+    
+    // Set the question text
+    questionText.textContent = question.question;
+    
+    // Clear options
+    optionsContainer.innerHTML = '';
+    
+    // Add options
+    question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.classList.add('option');
+        optionElement.textContent = option;
+        optionElement.dataset.index = index;
+        optionElement.addEventListener('click', selectOption);
+        optionsContainer.appendChild(optionElement);
+    });
+    
+    // Update progress indicator
+    const dots = document.querySelectorAll('.progress-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.remove('active');
+        if (index === currentQuestion) {
+            dot.classList.add('active');
         }
+    });
+    
+    // Reset timer
+    resetTimer();
+    
+    // Speak the question
+    const textToSpeak = `Question ${currentQuestion + 1}: ${question.question}`;
+    speakText(textToSpeak);
+    
+    // Start the timer after a brief pause to allow reading
+    setTimeout(() => {
+        startTimer();
+    }, 1000);
+}
+
+// Reset the timer
+function resetTimer() {
+    clearInterval(timer);
+    timeLeft = 10;
+    updateTimerDisplay();
+    isPaused = true;
+    timerBar.classList.remove('timer-paused');
+}
+
+// Start the timer
+function startTimer() {
+    isPaused = false;
+    clearInterval(timer);
+    updateTimerDisplay();
+    
+    // Start tick sounds
+    startTickSounds();
+    
+    timer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
         
-        // Load question
-        function loadQuestion() {
-            if (currentQuestion < questions.length) {
-                // Update progress indicator
-                document.querySelectorAll('.progress-dot').forEach((dot, index) => {
-                    dot.classList.toggle('active', index === currentQuestion);
-                });
-                
-                // Load question data
-                const question = questions[currentQuestion];
-                const questionTextContent = `${currentQuestion + 1}. ${question.question}`;
-                questionText.textContent = questionTextContent;
-                
-                // Read the question aloud
-                speakText(question.question);
-                
-                // Clear options container
-                optionsContainer.innerHTML = '';
-                
-                // Add options
-                question.options.forEach((option, index) => {
-                    const optionElement = document.createElement('div');
-                    optionElement.classList.add('option');
-                    optionElement.textContent = option;
-                    optionElement.dataset.index = index;
-                    optionElement.addEventListener('click', selectOption);
-                    optionsContainer.appendChild(optionElement);
-                });
-                
-                // Calculate reading time and start timer with pause
-                const readingTime = calculateReadingTime(question.question);
-                startTimer(readingTime);
-            } else {
-                // Show results
-                showResults();
-            }
-        }
-        
-        // Start timer with initial pause
-        function startTimer(pauseSeconds) {
-            timeLeft = 10;
-            isPaused = true;
-            
-            // Visual indication of pause
-            timerBar.classList.add('timer-paused');
-            updateTimerUI();
-            
-            // Wait for reading time before starting the countdown
-            setTimeout(() => {
-                isPaused = false;
-                timerBar.classList.remove('timer-paused');
-                
-                timer = setInterval(() => {
-                    if (!isPaused && !isTransitioning) {
-                        timeLeft--;
-                        updateTimerUI();
-                        
-                        if (timeLeft <= 0) {
-                            clearInterval(timer);
-                            // Highlight correct answer
-                            highlightCorrectAnswer();
-                            
-                            // Wait a moment then transition to next question
-                            setTimeout(() => {
-                                transitionToNextQuestion();
-                            }, 1500);
-                        }
-                    }
-                }, 1000);
-            }, pauseSeconds * 1000);
-        }
-        
-        // Transition to next question with animation
-        function transitionToNextQuestion() {
-            if (isTransitioning) return;
-            isTransitioning = true;
-            
-            // Play swoosh sound for transition
-            playSwooshSound();
-            
-            // Stop any current speech
-            if (currentUtterance) {
-                window.speechSynthesis.cancel();
-            }
-            
-            // Slide out current question
-            questionContainer.classList.add('slide-out');
-            
-            setTimeout(() => {
-                currentQuestion++;
-                
-                // Reset classes for next question
-                questionContainer.classList.remove('slide-out');
-                questionContainer.classList.add('slide-in');
-                
-                // Load next question content
-                loadQuestion();
-                
-                setTimeout(() => {
-                    questionContainer.classList.remove('slide-in');
-                    isTransitioning = false;
-                }, 600);
-            }, 500);
-        }
-        
-        // Update timer UI
-        function updateTimerUI() {
-            const percentage = (timeLeft / 10) * 100;
-            timerBar.style.width = `${percentage}%`;
-            timerText.textContent = isPaused ? 'READING' : timeLeft;
-            
-            // Change color based on time left
-            if (timeLeft <= 3 && !isPaused) {
-                timerBar.style.backgroundColor = '#F44336';
-            } else {
-                timerBar.style.backgroundColor = 'var(--leaf-green)';
-            }
-        }
-        
-        // Handle option selection
-        function selectOption(e) {
-            if (isTransitioning) return;
-            
+        if (timeLeft <= 0) {
             clearInterval(timer);
-            
-            const selectedIndex = parseInt(e.target.dataset.index);
-            const correctIndex = questions[currentQuestion].correctAnswer;
-            
-            // Disable all options
-            document.querySelectorAll('.option').forEach(option => {
-                option.removeEventListener('click', selectOption);
-                option.style.cursor = 'default';
-            });
-            
-            // Check if answer is correct
-            if (selectedIndex === correctIndex) {
-                e.target.classList.add('correct');
-                e.target.classList.add('flash');
-                score++;
-            } else {
-                // Highlight correct answer
-                const correctOption = document.querySelectorAll('.option')[correctIndex];
-                correctOption.classList.add('correct');
-                correctOption.classList.add('flash');
-            }
-            
-            // Play swoosh sound when transitioning
-            setTimeout(() => {
-                playSwooshSound();
-                transitionToNextQuestion();
-            }, 1500);
+            timeoutQuestion();
         }
-        
-        // Highlight correct answer
-        function highlightCorrectAnswer() {
-            const correctIndex = questions[currentQuestion].correctAnswer;
-            const correctOption = document.querySelectorAll('.option')[correctIndex];
-            correctOption.classList.add('correct');
-            correctOption.classList.add('flash');
+    }, 1000);
+}
+
+// Update the timer display
+function updateTimerDisplay() {
+    const percentage = (timeLeft / 10) * 100;
+    timerBar.style.width = `${percentage}%`;
+    timerText.textContent = timeLeft;
+    
+    // Change color based on time left
+    if (timeLeft <= 3) {
+        timerBar.style.backgroundColor = 'red';
+    } else {
+        timerBar.style.backgroundColor = 'var(--leaf-green)';
+    }
+}
+
+// Handle timeout for a question
+function timeoutQuestion() {
+    stopTickSounds();
+    
+    // Show correct answer
+    const correctIndex = questions[currentQuestion].correctAnswer;
+    const options = document.querySelectorAll('.option');
+    
+    options.forEach((option, index) => {
+        if (index === correctIndex) {
+            option.classList.add('correct');
         }
-        
-        // Show results
-        function showResults() {
-            // Stop any current speech
-            if (currentUtterance) {
-                window.speechSynthesis.cancel();
-            }
-            
-            questionContainer.style.display = 'none';
-            quizResults.style.display = 'block';
-            quizResults.classList.add('fade-in');
-            finalScore.textContent = `${score}/${questions.length}`;
-            
-            // Read the final score
-            if (voiceEnabled && speechSynthesisSupported) {
-                const scoreText = `Quiz completed! You scored ${score} out of ${questions.length}.`;
-                
-                // Small delay to ensure the UI is updated
-                setTimeout(() => {
-                    speakText(scoreText);
-                }, 500);
-            }
+        option.removeEventListener('click', selectOption);
+    });
+    
+    // Speak timeout message
+    speakText("Time's up! Moving to the next question.");
+    
+    // Move to next question after delay
+    setTimeout(() => {
+        animateNextQuestion();
+    }, 2000);
+}
+
+// Select an option
+function selectOption(e) {
+    if (isTransitioning) return;
+    
+    // Stop the timer
+    clearInterval(timer);
+    isPaused = true;
+    stopTickSounds();
+    
+    // Get the selected option index
+    const selectedIndex = parseInt(e.target.dataset.index);
+    
+    // Get the correct answer
+    const correctIndex = questions[currentQuestion].correctAnswer;
+    
+    // Check if the answer is correct
+    const isCorrect = selectedIndex === correctIndex;
+    
+    // Highlight the correct answer
+    const options = document.querySelectorAll('.option');
+    options.forEach((option, index) => {
+        if (index === correctIndex) {
+            option.classList.add('correct');
         }
+        option.removeEventListener('click', selectOption);
+    });
+    
+    // Update score if correct
+    if (isCorrect) {
+        score++;
+        playDingSound();
+        speakText("Correct! Well done.");
+        animateCharacter('correct');
+    } else {
+        speakText(`Incorrect. The correct answer is ${questions[currentQuestion].options[correctIndex]}.`);
+    }
+    
+    // Move to next question after delay
+    setTimeout(() => {
+        animateNextQuestion();
+    }, 2000);
+}
+
+// Animate to next question
+function animateNextQuestion() {
+    isTransitioning = true;
+    
+    // Play swoosh sound
+    playSwooshSound();
+    
+    // Slide out current question
+    questionContainer.classList.add('slide-out');
+    
+    setTimeout(() => {
+        // Move to next question
+        currentQuestion++;
         
-        // Restart quiz
-        function restartQuiz() {
-            // Stop any current speech
-            if (currentUtterance) {
-                window.speechSynthesis.cancel();
-            }
-            
-            currentQuestion = 0;
-            score = 0;
+        // Reset container style
+        questionContainer.classList.remove('slide-out');
+        questionContainer.classList.add('slide-in');
+        
+        // Load new question
+        loadQuestion();
+        
+        // Remove animation class after transition
+        setTimeout(() => {
+            questionContainer.classList.remove('slide-in');
             isTransitioning = false;
-            progressIndicator.innerHTML = '';
-            questionContainer.style.display = 'block';
-            quizResults.style.display = 'none';
-            questionContainer.className = 'question-container fade-in';
-            
-            // Play swoosh sound when restarting
-            playSwooshSound();
-            
-            initQuiz();
+        }, 600);
+    }, 500);
+}
+
+// Show results
+function showResults() {
+    // Hide question container
+    questionContainer.style.display = 'none';
+    
+    // Hide timer
+    document.querySelector('.timer-container').style.display = 'none';
+    
+    // Show results
+    quizResults.style.display = 'block';
+    quizResults.classList.add('fade-in');
+    
+    // Set final score
+    finalScore.textContent = `${score}/${questions.length}`;
+    
+    // Speak results
+    const percentage = Math.round((score / questions.length) * 100);
+    let resultMessage = `Quiz completed! You scored ${score} out of ${questions.length}, which is ${percentage} percent.`;
+    
+    if (percentage >= 90) {
+        resultMessage += " Excellent job! You're a biology master!";
+    } else if (percentage >= 70) {
+        resultMessage += " Good work! You have a solid understanding of biology.";
+    } else if (percentage >= 50) {
+        resultMessage += " Not bad, but there's room for improvement. Keep studying!";
+    } else {
+        resultMessage += " Looks like you need more practice with biology concepts. Don't give up!";
+    }
+    
+    speakText(resultMessage);
+}
+
+// Restart the quiz
+function restartQuiz() {
+    // Reset variables
+    currentQuestion = 0;
+    score = 0;
+    
+    // Clear progress indicators
+    progressIndicator.innerHTML = '';
+    
+    // Show question container
+    questionContainer.style.display = 'block';
+    
+    // Show timer
+    document.querySelector('.timer-container').style.display = 'block';
+    
+    // Hide results
+    quizResults.style.display = 'none';
+    quizResults.classList.remove('fade-in');
+    
+    // Initialize quiz again
+    initQuiz();
+}
+
+// Event listener for restart button
+restartBtn.addEventListener('click', restartQuiz);
+
+// Voice synthesis initialization
+if (speechSynthesisSupported) {
+    // Make sure we have voices loaded
+    if (window.speechSynthesis.getVoices().length === 0) {
+        window.speechSynthesis.onvoiceschanged = function() {
+            // Voices are now loaded
+        };
+    }
+}
+
+// Initialize the quiz when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    // Slightly delay initialization to allow everything to load
+    setTimeout(initQuiz, 500);
+    
+    // Add audio context initialization on user interaction (required by some browsers)
+    document.body.addEventListener('click', () => {
+        if (!audioContext && soundEffectsEnabled) {
+            initAudio();
         }
-        
-        // Event listeners
-        restartBtn.addEventListener('click', restartQuiz);
-        toggleVoiceBtn.addEventListener('click', toggleVoice);
-        toggleSoundBtn.addEventListener('click', toggleSoundEffects);
-        
-        // Handle voices loaded (sometimes they load asynchronously)
-        if (speechSynthesisSupported) {
-            window.speechSynthesis.onvoiceschanged = function() {
-                // We don't need to do anything here, just ensuring voices are loaded
-            };
-        }
-        
-        // Initialize the quiz
-        initQuiz();
-    </script>
+    }, { once: true });
+});
+
+</script>
 </body>
 </html>
